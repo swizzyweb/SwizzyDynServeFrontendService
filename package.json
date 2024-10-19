@@ -1,0 +1,44 @@
+{
+  "name": "@swizzyweb/swizzy-dyn-serve-frontend-web-service",
+  "version": "1.0.0",
+  "description": "My webpack project",
+  "main": "dist/app.js",
+  "scripts": {
+    "webpack": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && echo //webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "author": "Jason Gallagher",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wannawatchmecode/BrowserToolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wannawatchmecode/BrowserToolkit/issues"
+  },
+  "homepage": "https://github.com/wannawatchmecode/BrowserToolkit#readme",
+  "devDependencies": {
+    "@types/node": "^22.7.6",
+    "@webpack-cli/generators": "^3.0.7",
+    "html-webpack-plugin": "^5.6.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "workbox-webpack-plugin": "^7.1.0"
+  },
+  "dependencies": {
+    "@swizzyweb/browser-toolkit": "^1.0.0",
+    "@swizzyweb/express": "^4.19.2",
+    "@swizzyweb/swizzy-common": "^0.1.0",
+    "@swizzyweb/swizzy-dyn-serve-tool": "^1.0.0",
+    "@swizzyweb/swizzy-web-service": "^0.1.0",
+    "ejs": "^3.1.10"
+  }
+}

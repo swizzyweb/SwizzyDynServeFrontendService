@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="toolkit.js"></script>
+		<script src="main.js"></script>
+		<script type="text/javascript">
+			function init(dynServeUrl) {
+				window.BrowserToolkit.tools.get("SwizzyDynServeTool").setRootApiUrl(dynServeUrl);
+			}
+
+			function getTool() {
+				return window.BrowserToolkit.tools.get("SwizzyDynServeTool");
+			}
+
+			function installService() {
+				//const serviceName = document.getElementById('InstallServiceName').value;
+				//const dynServeTool = getTool();
+				executeServiceCommand('installService');
+			}
+
+			function runService() {
+				executeServiceCommand('runService');
+			}
+
+			function stopService() {
+				executeServiceCommand('stopService');
+			}
+
+			function executeServiceCommand(command) {
+				const serviceName = document.getElementById('ManageServiceName').value;
+				const dynServeTool = getTool();
+				dynServeTool[command]({serviceName});
+			}
+
+			function installTool() {
+				executeToolCommand('installTool');
+			}
+
+			function runTool() {
+				executeToolCommand('runTool');
+			}
+
+			function stopTool() {
+				executeToolCommand('stopTool');
+			}
+
+			function executeToolCommand(command) {
+				const toolName = document.getElementById('ToolName').value;
+				const dynServeTool = getTool();
+				dynServeTool[command]({toolName});
+			}
+
+			init('http://localhost:3005');
+
+
+
+		</script>
+	</head>
+	<body>
+		<h1>Swizzy Dyn Serve Management Portal</h1>
+		<div class="container">
+			<div class="manage-tool section">
+				<h3>Tool management</h3>
+				<label>Tool Name:</label>
+				<input id="ToolName" type="text" placeholder="Tool Name (ie: @swizzyweb/speech-tool)"></input>
+				<button onclick="installTool()">Install</button>
+				<button onclick="runTool()">Run</button>
+				<button onclick="stopTool()">Stop</button>
+			</div>
+			<div class="manage-web-services section">
+				<h3>WebService Management</h3>
+				<label>Service Name:</label>
+				<input id='ManageServiceName' type="text" placeholder="Service Name (ie: @swizzyweb/my-first-web-service)"></input>
+				<button onclick="installService()">Install</button>
+				<button onclick="runService()">Run</button>
+				<button onclick="stopService()">Stop</button>
+			</div>
+		</div>
+	</body>
+</html>
+
