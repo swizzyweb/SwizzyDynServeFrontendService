@@ -1,7 +1,7 @@
 {
-  "name": "@swizzyweb/swizzy-dyn-serve-frontend-web-service",
+  "name": "@swizzyweb/dyn-serve-frontend-web-service",
   "version": "0.1.0",
-  "description": "My webpack project",
+  "description": "Swizzy dyn serve frontend service",
   "main": "dist/app.js",
   "scripts": {
     "webpack": "webpack",
