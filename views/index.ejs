@@ -5,56 +5,119 @@
 		<script src="main.js"></script>
 		<script type="text/javascript">
 			function init(dynServeUrl) {
-				window.BrowserToolkit.tools.get("SwizzyDynServeTool").setRootApiUrl(dynServeUrl);
+				getTool().setRootApiUrl(dynServeUrl);
 			}
 
 			function getTool() {
-				return window.BrowserToolkit.tools.get("SwizzyDynServeTool");
+				return window.BrowserToolkit.tools.SwizzyDynServeTool;
 			}
 
-			function installService() {
+			async function installService() {
 				//const serviceName = document.getElementById('InstallServiceName').value;
 				//const dynServeTool = getTool();
-				executeServiceCommand('installService');
+				await executeServiceCommand('installService');
 			}
 
-			function runService() {
-				executeServiceCommand('runService');
+			async function runService() {
+				await executeServiceCommand('runService');
 			}
 
-			function stopService() {
-				executeServiceCommand('stopService');
+			async function stopService() {
+				await executeServiceCommand('stopService');
 			}
 
-			function executeServiceCommand(command) {
+			function printWaiting(intro, outputElement) {
+				var output = intro;
+				outputElement.value = output;
+
+				return setInterval(() => {
+					output += '.';
+					outputElement.value = output;
+				}, 100);
+
+			}
+
+			async function executeServiceCommand(command) {
 				const serviceName = document.getElementById('ManageServiceName').value;
-				const dynServeTool = getTool();
-				dynServeTool[command]({serviceName});
+				const port = parseInt(document.getElementById('ManageServicePort').value);
+				const textArea = document.getElementById('WebServiceCommandOutput');
+				const interval = printWaiting(`Executing command ${command} for ${serviceName} with port ${port} waiting`, textArea);
+				try {
+
+					const dynServeTool = getTool();
+					const resultPromise = dynServeTool[command]({serviceName, port});
+					const result = await resultPromise;
+					clearInterval(interval);
+					textArea.value = JSON.stringify(result);
+					return result;
+				} catch(e) {
+					clearInterval(interval);
+					textArea.value = `Failed to run command ${command} for ${serviceName} with exception ${e}`;
+				}
 			}
 
-			function installTool() {
-				executeToolCommand('installTool');
+			async function installTool() {
+				await executeToolCommand('installTool');
 			}
 
-			function runTool() {
-				executeToolCommand('runTool');
+			async function runTool() {
+				await executeToolCommand('runTool');
 			}
 
-			function stopTool() {
-				executeToolCommand('stopTool');
+			async function stopTool() {
+				await executeToolCommand('stopTool');
 			}
 
-			function executeToolCommand(command) {
+			async function executeToolCommand(command) {
 				const toolName = document.getElementById('ToolName').value;
+				const textArea = document.getElementById('ToolCommandOutput');
+				let interval = printWaiting(`Executing command ${command} for ${toolName} waiting`, textArea);
+				try {
 				const dynServeTool = getTool();
-				dynServeTool[command]({toolName});
+				const resultPromise = dynServeTool[command]({toolName});
+				const result = await resultPromise;
+				clearInterval(interval);
+				textArea.value = JSON.stringify(result);
+				return result;
+				} catch(e) {
+					clearInterval(interval);
+					textArea.value = `Failed to run command ${command} for ${toolName} with excetion ${e}`;
+
+				}
 			}
 
-			init('http://localhost:3005');
+			async function refreshRunningServices() {
+				const dynServeTool = getTool();
+				const runningServices = await dynServeTool.getRunningWebServices({});
+				document.getElementById('RunningWebServices').value = JSON.stringify(runningServices);
+			}
 
+			async function refreshRunningTools() {
+				const dynServeTool = getTool();
+				const runningTools = await dynServeTool.getRunningTools({});
+				document.getElementById('RunningTools').value = JSON.stringify(runningTools);
+				//return runningTools;
+			}
 
+			async function addToolToToolkit() {
+				await executeToolCommand('installToolToToolkit');
+			}
+
+			init(window.origin);
 
 		</script>
+
+		<style>
+		input {
+			width: 75%;
+		}
+
+		textarea {
+			height: 150px;
+			width: 75%;
+		}
+
+		</style>
 	</head>
 	<body>
 		<h1>Swizzy Dyn Serve Management Portal</h1>
@@ -62,18 +125,40 @@
 			<div class="manage-tool section">
 				<h3>Tool management</h3>
 				<label>Tool Name:</label>
-				<input id="ToolName" type="text" placeholder="Tool Name (ie: @swizzyweb/speech-tool)"></input>
-				<button onclick="installTool()">Install</button>
+				<input id="ToolName" name="toolName" type="text" placeholder="Tool Name (ie: @swizzyweb/speech-tool)" autocomplete="on"></input>
+				<br/>
+				<input id="ToolPort" name="toolPort" type="text" placeholder="Tool Port (ie: 3500)" autocomplete="on"></input>
+
+				<br/>
+				<button onclick="installTool()">Remote Install</button>
 				<button onclick="runTool()">Run</button>
+				<button onclick="addToolToToolkit()">Local Install</button>
 				<button onclick="stopTool()">Stop</button>
+				<button onclick="refreshRunningTools()">Refresh Running Tools</button>
+				<br/>
+				<label>Tool Command Output<label>
+				<br/>
+				<textarea id="ToolCommandOutput"></textarea>
+				<textarea id="RunningTools"></textarea>
 			</div>
 			<div class="manage-web-services section">
 				<h3>WebService Management</h3>
 				<label>Service Name:</label>
-				<input id='ManageServiceName' type="text" placeholder="Service Name (ie: @swizzyweb/my-first-web-service)"></input>
+				<input id='ManageServiceName' name="serviceName" type="text" placeholder="Service Name (ie: @swizzyweb/my-first-web-service)" autocomplete="on"></input>
+				<br/>
+				<input id='ManageServicePort' name="servicePort" type="text" placeholder="Service Name (ie: 3000)" autocomplete="on"></input>
+
+				<br/>
 				<button onclick="installService()">Install</button>
 				<button onclick="runService()">Run</button>
 				<button onclick="stopService()">Stop</button>
+				<button onclick="refreshRunningServices()">Refresh Running WebServices</button>
+
+				<br/>
+				<label>WebService Command Output</label>
+				<br/>
+				<textarea id="WebServiceCommandOutput"></textarea>
+				<textarea id="RunningWebServices"></textarea>
 			</div>
 		</div>
 	</body>

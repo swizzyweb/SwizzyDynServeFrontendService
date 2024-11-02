@@ -1,6 +1,6 @@
 {
   "name": "@swizzyweb/swizzy-dyn-serve-frontend-web-service",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "My webpack project",
   "main": "dist/app.js",
   "scripts": {
@@ -14,14 +14,6 @@
   },
   "author": "Jason Gallagher",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wannawatchmecode/BrowserToolkit.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wannawatchmecode/BrowserToolkit/issues"
-  },
-  "homepage": "https://github.com/wannawatchmecode/BrowserToolkit#readme",
   "devDependencies": {
     "@types/node": "^22.7.6",
     "@webpack-cli/generators": "^3.0.7",
@@ -34,11 +26,29 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
-    "@swizzyweb/browser-toolkit": "^1.0.0",
+    "@swizzyweb/browser-toolkit": "^0.1.0",
     "@swizzyweb/express": "^4.19.2",
     "@swizzyweb/swizzy-common": "^0.1.0",
-    "@swizzyweb/swizzy-dyn-serve-tool": "^1.0.0",
+    "@swizzyweb/swizzy-dyn-serve-tool": "^0.1.0",
     "@swizzyweb/swizzy-web-service": "^0.1.0",
     "ejs": "^3.1.10"
-  }
+  },
+  "types": "./dist/app.d.ts",
+  "keywords": [
+    "swizzy",
+    "dyn",
+    "serve",
+    "web",
+    "service",
+    "frontend",
+    "dynamic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swizzyweb/SwizzyDynServeFrontendService.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swizzyweb/SwizzyDynServeFrontendService/issues"
+  },
+  "homepage": "https://github.com/swizzyweb/SwizzyDynServeFrontendService#readme"
 }

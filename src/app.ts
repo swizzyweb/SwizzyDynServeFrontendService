@@ -43,3 +43,5 @@ export class SwizzyDynServeFrontendWebService extends WebService {
 export function getWebservice(props: any): IWebService {
     return new SwizzyDynServeFrontendWebService(props);
 }
+
+export const routers = [router];

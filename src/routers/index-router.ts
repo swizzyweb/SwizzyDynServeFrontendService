@@ -17,7 +17,7 @@ router.use(timeLog);
 router.get('/', (req: Request, res:Response) => {
   	console.log("Get browserToolkit");
 	req.app.set('view engine', 'ejs');
-	req.app.set('views', path.join(require.resolve('@swizzyweb/swizzy-dyn-serve-frontend-web-service'),'/../../views'));
+	req.app.set('views', path.join(__dirname,'/../../views'));
 	res.render('index');
 });
 
