@@ -1,6 +1,6 @@
 import { IRunProps, IRunResult, IWebService, WebService } from "@swizzyweb/swizzy-web-service";
 import { router } from "./routers/index-router";
-
+import { getPackageJson } from '@swizzyweb/swizzy-common';
 export class SwizzyDynServeFrontendWebService extends WebService {
     name = 'SwizzyDynServeFrontentWebService';
 
@@ -41,7 +41,9 @@ export class SwizzyDynServeFrontendWebService extends WebService {
 }
 
 export function getWebservice(props: any): IWebService {
-    return new SwizzyDynServeFrontendWebService(props);
+    const packageJson = getPackageJson(1);
+    const packageName = packageJson.name;
+    return new SwizzyDynServeFrontendWebService({...props, ...props.serviceArgs, packageName});
 }
 
 export const routers = [router];

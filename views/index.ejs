@@ -13,8 +13,6 @@
 			}
 
 			async function installService() {
-				//const serviceName = document.getElementById('InstallServiceName').value;
-				//const dynServeTool = getTool();
 				await executeServiceCommand('installService');
 			}
 
@@ -40,12 +38,20 @@
 			async function executeServiceCommand(command) {
 				const serviceName = document.getElementById('ManageServiceName').value;
 				const port = parseInt(document.getElementById('ManageServicePort').value);
+        const serviceArgsText = document.getElementById('ServiceArgs').value;
+        let serviceArgs;
+        if (serviceArgsText) {
+          serviceArgs = JSON.parse(serviceArgsText);
+        }
+        console.log(`serviceArgs: ${JSON.stringify(serviceArgs)}`);
 				const textArea = document.getElementById('WebServiceCommandOutput');
 				const interval = printWaiting(`Executing command ${command} for ${serviceName} with port ${port} waiting`, textArea);
 				try {
 
+          const args ={serviceName, port, serviceArgs};
+console.log(`args: ${args}`);
 					const dynServeTool = getTool();
-					const resultPromise = dynServeTool[command]({serviceName, port});
+					const resultPromise = dynServeTool[command](args);
 					const result = await resultPromise;
 					clearInterval(interval);
 					textArea.value = JSON.stringify(result);
@@ -71,10 +77,11 @@
 			async function executeToolCommand(command) {
 				const toolName = document.getElementById('ToolName').value;
 				const textArea = document.getElementById('ToolCommandOutput');
+        const toolArgs = document.getElementById('serviceArgs')
 				let interval = printWaiting(`Executing command ${command} for ${toolName} waiting`, textArea);
 				try {
 				const dynServeTool = getTool();
-				const resultPromise = dynServeTool[command]({toolName});
+				const resultPromise = dynServeTool[command]({toolName, toolArgs});
 				const result = await resultPromise;
 				clearInterval(interval);
 				textArea.value = JSON.stringify(result);
@@ -96,7 +103,6 @@
 				const dynServeTool = getTool();
 				const runningTools = await dynServeTool.getRunningTools({});
 				document.getElementById('RunningTools').value = JSON.stringify(runningTools);
-				//return runningTools;
 			}
 
 			async function addToolToToolkit() {
@@ -122,45 +128,60 @@
 	<body>
 		<h1>Swizzy Dyn Serve Management Portal</h1>
 		<div class="container">
-			<div class="manage-tool section">
-				<h3>Tool management</h3>
-				<label>Tool Name:</label>
-				<input id="ToolName" name="toolName" type="text" placeholder="Tool Name (ie: @swizzyweb/speech-tool)" autocomplete="on"></input>
-				<br/>
-				<input id="ToolPort" name="toolPort" type="text" placeholder="Tool Port (ie: 3500)" autocomplete="on"></input>
-
-				<br/>
-				<button onclick="installTool()">Remote Install</button>
-				<button onclick="runTool()">Run</button>
-				<button onclick="addToolToToolkit()">Local Install</button>
-				<button onclick="stopTool()">Stop</button>
-				<button onclick="refreshRunningTools()">Refresh Running Tools</button>
-				<br/>
-				<label>Tool Command Output<label>
-				<br/>
-				<textarea id="ToolCommandOutput"></textarea>
-				<textarea id="RunningTools"></textarea>
-			</div>
-			<div class="manage-web-services section">
+    <div class="manage-web-services section">
 				<h3>WebService Management</h3>
 				<label>Service Name:</label>
 				<input id='ManageServiceName' name="serviceName" type="text" placeholder="Service Name (ie: @swizzyweb/my-first-web-service)" autocomplete="on"></input>
 				<br/>
 				<input id='ManageServicePort' name="servicePort" type="text" placeholder="Service Name (ie: 3000)" autocomplete="on"></input>
+        <br/>
+        <label>Service Args: </label>
+        <br/>
+        <textarea id='ServiceArgs' name='serviceArgs'></textarea>
 
 				<br/>
 				<button onclick="installService()">Install</button>
-				<button onclick="runService()">Run</button>
+				<button onclick="runService()">Start</button>
 				<button onclick="stopService()">Stop</button>
 				<button onclick="refreshRunningServices()">Refresh Running WebServices</button>
 
 				<br/>
-				<label>WebService Command Output</label>
+				<label>WebService Command Output:</label>
 				<br/>
 				<textarea id="WebServiceCommandOutput"></textarea>
+        <br/>
+        <labe>Running Web Services:</labe>
+        <br/>
 				<textarea id="RunningWebServices"></textarea>
 			</div>
-		</div>
+
+			<div class="manage-tool section">
+				<h3>Tool management</h3>
+				<label>Tool Name:</label>
+				<input id="ToolName" name="toolName" type="text" placeholder="Tool Name (ie: @swizzyweb/speech-tool)" autocomplete="on"></input>
+				<br/>
+        <label>Access Port: </label>
+				<input id="ToolPort" name="toolPort" type="text" placeholder="Tool Port (ie: 3500)" autocomplete="on"></input>
+        <br/>
+        <label>Tool Args: </label>
+        <br/>
+        <textarea id="ToolArgs" name="toolArgs"></textarea>
+				<br/>
+				<button onclick="installTool()">Remote Install</button>
+				<button onclick="runTool()">Enable</button>
+				<button onclick="addToolToToolkit()">Local Install</button>
+				<button onclick="stopTool()">Disable</button>
+				<button onclick="refreshRunningTools()">Refresh Running Tools</button>
+				<br/>
+				<label>Tool Command Output:<label>
+				<br/>
+				<textarea id="ToolCommandOutput"></textarea>
+          <br/>
+          <label>Running Tools:</label>
+          <br/>
+				<textarea id="RunningTools"></textarea>
+			</div>
+			</div>
 	</body>
 </html>
 
