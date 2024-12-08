@@ -1,6 +1,6 @@
 {
   "name": "@swizzyweb/dyn-serve-frontend-web-service",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Swizzy dyn serve frontend service",
   "main": "dist/app.js",
   "scripts": {
@@ -15,6 +15,7 @@
   "author": "Jason Gallagher",
   "license": "MIT",
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
     "@types/node": "^22.7.6",
     "@webpack-cli/generators": "^3.0.7",
     "html-webpack-plugin": "^5.6.0",
@@ -26,11 +27,11 @@
     "workbox-webpack-plugin": "^7.1.0"
   },
   "dependencies": {
-    "@swizzyweb/browser-toolkit": "^0.1.0",
+    "@swizzyweb/browser-toolkit": "^0.2.0",
     "@swizzyweb/express": "^4.19.2",
     "@swizzyweb/swizzy-common": "^0.2.0",
     "@swizzyweb/swizzy-dyn-serve-tool": "^0.2.0",
-    "@swizzyweb/swizzy-web-service": "^0.2.0",
+    "@swizzyweb/swizzy-web-service": "^0.2.1",
     "ejs": "^3.1.10"
   },
   "types": "./dist/app.d.ts",

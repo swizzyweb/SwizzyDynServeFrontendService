@@ -1,31 +1,46 @@
 // @ts-ignore
-import {Request, Response, Router } from '@swizzyweb/express';
+import { Request, Response, Router } from "@swizzyweb/express";
 //import {ejs } from 'ejs';
-import path from 'path';
+import path from "path";
+import ejs from "ejs";
 export const router = Router();
 
-// middleware that is specific to this router
-const timeLog = (req: Request, res: Response, next: ()=>void) => {
-  console.log('Time: ', Date.now())
-  next()
+const props: any = { logger: console };
+
+export function setProp(key: string, val: any) {
+  props[key] = val;
 }
 
-router.use(timeLog);
-//router.set('view engine', 'ejs');
+// middleware that is specific to this router
+const requestLog = (req: Request, res: Response, next: () => void) => {
+  const logger = props.logger;
+  logger.info(`${req.ip} ${req.method} ${req.originalUrl}`);
+  next();
+};
+
+router.use(requestLog);
 
 // define the home page route
-router.get('/', (req: Request, res:Response) => {
-  	console.log("Get browserToolkit");
-	req.app.set('view engine', 'ejs');
-	req.app.set('views', path.join(__dirname,'/../../views'));
-	res.render('index');
+router.get("/", async (req: Request, res: Response) => {
+  const logger = props.logger;
+  const filePath = path.join(__dirname, "/../../views/index.ejs");
+  res.send(await ejs.renderFile(filePath));
 });
 
 // define the about route
-router.get('/toolkit.js', (req: Request, res: Response) => {
-	console.log("Get main.js");
-  res.sendFile(path.join(path.dirname(require.resolve('@swizzyweb/browser-toolkit')), './main.js'));
+router.get("/toolkit.js", (req: Request, res: Response) => {
+  res.sendFile(
+    path.join(
+      path.dirname(require.resolve("@swizzyweb/browser-toolkit")),
+      "./main.js",
+    ),
+  );
 });
-router.get('/main.js', (req: Request, res: Response) => {
-	res.sendFile(path.join(path.dirname(require.resolve('@swizzyweb/swizzy-dyn-serve-tool')), './main.js'))
+router.get("/main.js", (req: Request, res: Response) => {
+  res.sendFile(
+    path.join(
+      path.dirname(require.resolve("@swizzyweb/swizzy-dyn-serve-tool")),
+      "./main.js",
+    ),
+  );
 });
